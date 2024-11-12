@@ -1,0 +1,189 @@
+{% extends "base.html" %} {% block body %}
+
+<ol class="breadcrumb">
+	<li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+	<li class="breadcrumb-item"><a href="{% url 'manage_brands' %}">Manage Brands</a></li>
+	<li class="breadcrumb-item active">View</li>
+</ol>
+
+<div class="card">
+
+	<div class="card-header p-3">
+		<div class="row align-items-center">
+			<div class="col-4 text-start">
+				<a href="{% url 'manage_brands' %}" class="btn btn-sm rounded-pill btn-outline-secondary">
+					<i class='bx bxs-left-arrow-circle'></i> Back
+				</a>
+			</div>
+			<div class="col-4 text-center">
+				<h4 class="card-title text-center">{{brand_obj.brand.upper}}</h4>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="card-body">
+		<div class="row">
+
+			<div id="map" class="map col-lg-4 col-md-4"></div>
+
+			<div id="popup" class="ol-popup">
+				<a href="#" id="popup-closer" class="ol-popup-closer"></a>
+				<div id="popup-content"></div>
+			</div>
+
+
+			<div class="col-lg-8 col-md-8">
+
+				<div class="row">
+
+					<div class="col-lg-3 col-md-3 mb-3">
+						<h5 class="mb-0">{{brand_obj.osm_id.title}}</h5>
+						<p class="text-muted mb-1">{{field_labels.osm_id.upper}}</p>
+					</div>
+
+					<div class="col-lg-3 col-md-3 mb-3">
+						<h5 class="mb-0">{{brand_obj.city}}</h5>
+						<p class="text-muted mb-1">{{field_labels.city.upper}}</p>
+					</div>
+
+					<div class="col-lg-3 col-md-3 mb-3">
+						<h5 class="mb-0">{{brand_obj.street.title}}</h5>
+						<p class="text-muted mb-1">{{field_labels.street.upper}}</p>
+					</div>
+
+					<div class="col-lg-3 col-md-3 mb-3">
+						<h5 class="mb-0">{{brand_obj.pincode.title}}</h5>
+						<p class="text-muted mb-1">{{field_labels.pincode.upper}}</p>
+					</div>
+
+					<div class="col-lg-3 col-md-3 mb-3">
+						<h5 class="mb-0">{{brand_obj.housenumber.title}}</h5>
+						<p class="text-muted mb-1">{{field_labels.housenumber.upper}}</p>
+					</div>
+
+					<div class="col-lg-3 col-md-3 mb-3">
+						<h5 class="mb-0">{{brand_obj.suburb.title}}</h5>
+						<p class="text-muted mb-1">{{field_labels.suburb.upper}}</p>
+					</div>
+
+					<div class="col-lg-3 col-md-3 mb-3">
+						<h5 class="mb-0">{{brand_obj.name.title}}</h5>
+						<p class="text-muted mb-1">{{field_labels.name.upper}}</p>
+					</div>
+
+					<div class="col-lg-3 col-md-3 mb-3">
+						<h5 class="mb-0">{{brand_obj.opening_hours.title}}</h5>
+						<p class="text-muted mb-1">{{field_labels.opening_hours.upper}}</p>
+					</div>
+
+					<div class="col-lg-3 col-md-3 mb-3">
+						<h5 class="mb-0">{{brand_obj.operator.title}}</h5>
+						<p class="text-muted mb-1">{{field_labels.operator.upper}}</p>
+					</div>
+
+				</div>
+
+				<hr>
+
+				<div class="row">
+					<div class="col-lg-6 col-md-6 mb-3">
+						<h5 class="mb-0">{{brand_obj.geometry.title}}</h5>
+						<p class="text-muted mb-1">{{field_labels.geometry.upper}}</p>
+					</div>
+
+					<div class="col-lg-6 col-md-6 mb-3">
+						<p class="mb-0">&bull; {{brand_obj.brand.title}}</p>
+						<p class="text-muted mb-1">{{field_labels.brand.upper}}</p>
+					</div>
+					<hr>
+				</div>
+
+			</div>
+		</div>
+
+
+		<div class="row mt-4">
+			<div class="col-lg-12 col-md-6">
+				<p class="text-muted mb-1">{{field_labels.brand_wikipedia.upper}}</p>
+				<h5 class="mb-0">{{brand_obj.brand_wikipedia.title}}</h5>
+			</div>
+			<div class="col-lg-12 col-md-6">
+				<p class="text-muted mb-1">{{field_labels.description_de.upper}}</p>
+				<h5 class="mb-0">{{brand_obj.description_de.title}}</h5>
+			</div>
+		</div>
+
+	</div>
+
+	{% endblock body %}
+
+
+	{% block js_block %}
+	<script type="text/javascript">
+		var latitude = {{latitude}}.toString();
+		var longitude = {{longitude}}.toString();
+
+		var map = new ol.Map({
+			target: 'map',
+			layers: [
+				new ol.layer.Tile({
+					source: new ol.source.OSM()
+				})
+				],
+			view: new ol.View({
+				center: ol.proj.fromLonLat([{{longitude}}, {{latitude}}]),
+				zoom: 5
+			})
+		});
+		
+		
+		var marker = new ol.Feature({
+			geometry: new ol.geom.Point(ol.proj.fromLonLat([{{longitude}}, {{latitude}}]))
+			
+		});
+		var markerStyle = new ol.style.Style({
+			image: new ol.style.Icon({
+				src: 'https://docs.maptiler.com/openlayers/default-marker/marker-icon.png',
+				scale: 0.8,
+				anchor: [0.5, 1]
+			})
+		});
+		
+		marker.setStyle(markerStyle);
+		
+		var vectorSource = new ol.source.Vector({
+			features: [marker]
+		});
+		
+		var vectorLayer = new ol.layer.Vector({
+			source: vectorSource
+		});
+		
+		map.addLayer(vectorLayer);
+		
+		var popup = new ol.Overlay({
+			element: document.getElementById('popup'),
+			positioning: 'bottom-center',
+			stopEvent: false,
+			offset: [0, -10]
+		});
+		map.addOverlay(popup);
+		
+		map.on('click', function (evt) {
+			var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
+				return feature;
+			});
+			if (feature) {
+				var coordinate = feature.getGeometry().getCoordinates();
+				popup.setPosition(coordinate);
+				popup.getElement().innerHTML = '<h5>{{brand_obj.name.upper}}</h5><p>{{brand_obj.city.upper}}</p>';
+				popup.getElement().style.display = 'block';
+			} else {
+				popup.getElement().style.display = 'none';
+			}
+		});
+		
+		
+	</script>
+	{% endblock js_block %}

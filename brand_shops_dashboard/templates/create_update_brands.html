@@ -1,0 +1,252 @@
+{% extends "base.html" %} {% block body %}
+
+<style type="text/css">
+	#suggestion-box {
+		float: left;
+		list-style: none;
+		margin-top: -3px;
+		padding: 0;
+		width: 190px;
+		position: absolute;
+	}
+
+	#suggestion-box li {
+		padding: 10px;
+		background: #f0f0f0;
+		border-bottom: #bbb9b9 1px solid;
+	}
+
+	#suggestion-box li:hover {
+		background: #ece3d2;
+		cursor: pointer;
+	}
+
+	input[name=city]::-webkit-search-cancel-button {
+		-webkit-appearance: searchfield-cancel-button;
+	}
+
+</style>
+
+
+
+<ol class="breadcrumb">
+	<li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a> </li>
+	<li class="breadcrumb-item"><a href="{% url 'manage_brands' %}">Manage Brands</a></li>
+	<li class="breadcrumb-item active">Update</li>
+</ol>
+
+
+{% if messages %}
+{% for msg in messages %}
+<div class="alert alert-warning">{{ msg }}</div>
+{% endfor %}
+{% endif %}
+
+
+
+<div class="card mb-4">
+
+	<div class="card-header">
+		<a href="{% url 'manage_brands' %}" class="btn rounded-pill btn-outline-secondary btn btn-sm btn-secondary" style="float:left;">
+			<i class='bx bxs-left-arrow-circle'></i> Back
+		</a>
+		<h4 class="card-title text-center">Brands Details</h4>
+	</div>
+
+
+	<div class="card-body">
+
+		<form method="post">
+			{% csrf_token %}
+
+			<div class="row">
+
+				<div class="col-lg-3 col-md-3 mb-3">
+					<label for="{{ form.osm_id.id_for_label }}">{{ form.osm_id.label }}</label>
+					{{ form.osm_id }}
+					{% if form.osm_id.errors %}
+					{{ form.osm_id.errors }}
+					{% endif %}
+				</div>
+
+				<div class="col-lg-3 col-md-3 mb-3">
+					<label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+					{{ form.name }}
+					{% if form.name.errors %}
+					{{ form.name.errors }}
+					{% endif %}
+				</div>
+
+				<div class="col-lg-3 col-md-3 mb-3">
+					<label for="{{ form.brand.id_for_label }}">{{ form.brand.label }}</label>
+					{{ form.brand }}
+					{% if form.brand.errors %}
+					{{ form.brand.errors }}
+					{% endif %}
+				</div>
+
+				<div class="col-lg-3 col-md-3 mb-3">
+					<label for="{{ form.city.id_for_label }}">{{ form.city.label }}</label>
+					{{ form.city }}
+					<ul id="suggestion-box"></ul>
+					{% if form.city.errors %}
+					{{ form.city.errors }}
+					{% endif %}
+				</div>
+				
+				<div class="col-lg-3 col-md-3 mb-3">
+					<label for="{{ form.street.id_for_label }}">{{ form.street.label }}</label>
+					{{ form.street }}
+					{% if form.street.errors %}
+					{{ form.street.errors }}
+					{% endif %}
+				</div>
+
+				<div class="col-lg-3 col-md-3 mb-3">
+					<label for="{{ form.pincode.id_for_label }}">{{ form.pincode.label }}</label>
+					{{ form.pincode }}
+					{% if form.pincode.errors %}
+					{{ form.pincode.errors }}
+					{% endif %}
+				</div>
+
+				<div class="col-lg-3 col-md-3 mb-3">
+					<label for="{{ form.housenumber.id_for_label }}">{{ form.housenumber.label }}</label>
+					{{ form.housenumber }}
+					{% if form.housenumber.errors %}
+					{{ form.housenumber.errors }}
+					{% endif %}
+				</div>
+
+				<div class="col-lg-3 col-md-3 mb-3">
+					<label for="{{ form.suburb.id_for_label }}">{{ form.suburb.label }}</label>
+					{{ form.suburb }}
+					{% if form.suburb.errors %}
+					{{ form.suburb.errors }}
+					{% endif %}
+				</div>
+
+				<div class="col-lg-3 col-md-3 mb-3">
+					<label for="{{ form.opening_hours.id_for_label }}">{{ form.opening_hours.label }}</label>
+					{{ form.opening_hours }}
+					{% if form.opening_hours.errors %}
+					{{ form.opening_hours.errors }}
+					{% endif %}
+				</div>
+
+				<div class="col-lg-3 col-md-3 mb-3">
+					<label for="{{ form.operator.id_for_label }}">{{ form.operator.label }}</label>
+					{{ form.operator }}
+					{% if form.operator.errors %}
+					{{ form.operator.errors }}
+					{% endif %}
+				</div>
+
+				<div class="col-lg-3 col-md-3 mb-3">
+					<label for="{{ form.geometry.id_for_label }}">{{ form.geometry.label }}</label>
+					{{ form.geometry }}
+					{% if form.geometry.errors %}
+					{{ form.geometry.errors }}
+					{% endif %}
+				</div>
+
+				<div class="row">
+					<div class="col-lg-6 col-md-6 mb-3">
+						<label for="{{ form.brand_wikipedia.id_for_label }}">{{ form.brand_wikipedia.label }}</label>
+						{{ form.brand_wikipedia }}
+						{% if form.brand_wikipedia.errors %}
+						{{ form.brand_wikipedia.errors }}
+						{% endif %}
+					</div>
+
+					<div class="col-lg-6 col-md-6 mb-3">
+						<label for="{{ form.description_de.id_for_label }}">{{ form.description_de.label }}</label>
+						{{ form.description_de }}
+						{% if form.description_de.errors %}
+						{{ form.description_de.errors }}
+						{% endif %}
+					</div>
+				</div>
+
+
+			</div>
+
+			<div class="mt-2">
+
+				{% if "create" in request.path %}
+				<button type="submit" class="btn rounded-pill btn-success me-2" name="Submit-profile-details" value="Submit-profile-details" style="float:right;">
+					<i class="bx bxs-check-square"></i> Create
+				</button>
+
+				{% else %}
+
+				<button type="submit" class="btn rounded-pill btn-info me-2" name="Submit-profile-details" value="Submit-profile-details" style="float:right;">
+					<i class="bx bxs-check-square"></i> Update
+				</button>
+				{% endif %}
+
+			</div>
+
+		</form>
+
+	</div>
+</div>
+
+{% endblock body %}
+
+
+
+
+
+{% block js_block %}
+<script type="text/javascript">
+	$(document).ready(function() {
+
+		$("[name='city']").keyup(function() {
+			var keyword = $(this).val();
+			if (keyword.length !== 0) {
+				$.ajax({
+					type:"POST",
+					dataType: "html",
+					url: "{% url 'get_city_list' %}",
+					data: JSON.stringify( { 'keyword' : keyword } ),
+					contentType: "application/json; charset=utf-8",
+					headers: {'X-CSRFToken': '{{ csrf_token }}'},
+					success: function( data ){
+						var data = $.parseJSON(data);
+						var output = '';
+						$.each(data, function(key, val) {
+							output += "<li>" + val + "</li>";
+						});
+						$("#suggestion-box").html(output).show();
+					}
+				});
+			}
+		});
+
+		$(document).on('click', '#suggestion-box li', function() {
+			$("[name='city']").val( $(this).text() );
+			$("#suggestion-box").hide();
+		});
+
+
+		$('form').submit(function(event) {
+			var cityInput = $("[name='city']").val().trim().toLowerCase();
+			var cityInput = cityInput.replace(/\s+/g, '');
+			
+			if ( cityInput.length != 0 ) {
+							
+				var cityList = $("#suggestion-box li").map(function() {
+					return $(this).text().trim().toLowerCase().replace(/\s+/g, '');
+				}).get();
+				if ( $.inArray(cityInput, cityList) == -1 ) {
+					alert("Please enter valid city name");
+					event.preventDefault();
+				}
+			}
+				
+		});
+
+	} );
+</script>
+{% endblock js_block %}

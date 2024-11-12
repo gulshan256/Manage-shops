@@ -1,0 +1,58 @@
+{% extends "base.html" %} {% block body %}
+
+
+<ol class="breadcrumb">
+	<li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+	<li class="breadcrumb-item active">Manage Brands</li>
+</ol>
+
+
+<div class="card">
+
+	<h5 class="card-header">		
+		<a href="{% url 'create_brands' %}" class="btn rounded-pill btn-success" style="float:right">
+			<i class="bx bx-plus-circle"></i> &nbsp; Create Database
+		</a>
+	</h5>
+	
+	<div class="card-body">
+		
+		<div class="table-responsive text-nowrap">
+			<table class="table listview_table text-center">
+				<thead>
+					<tr>
+						 <th>OSM Id</th>
+						 <th>Name</th>
+						<th>City</th>
+						<th>Operator</th>
+						 <th>Opening Hours</th>
+						<th>Created At</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody class="table-border-bottom-0">
+
+					 {% for obj in brand_obj %}
+						<tr>
+							<td>{{ obj.osm_id }}</td>
+							<td>{{ obj.brand|default_if_none:"" }}</td>
+							<td>{{ obj.name|default_if_none:"" }}</td>
+							<td>{{ obj.city|default_if_none:"" }}</td>
+							<td>{{ obj.operator|default_if_none:"" }}</td>
+							<td>{{ obj.opening_hours|default_if_none:"" }}</td>
+							<td>
+								<a href="{% url 'view_brands' osm_id=obj.osm_id %}" class="btn btn-icon btn-sm btn-info mx-1" data-bs-toggle="tooltip" title="View Details"><i class="bx bx-detail"></i></a>
+
+								<a href="{% url 'update_brands' osm_id=obj.osm_id %}" class="btn btn-icon btn-sm btn-primary mx-1" data-bs-toggle="tooltip" title="Update Record"><i class='bx bx-pencil'></i></a>
+							</td>
+						</tr>
+					 {% endfor %} 
+					
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+{% endblock body %}

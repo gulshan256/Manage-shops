@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en" class="light-style layout-menu-fixed">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+	<title>Brand Shop</title>
+	
+	<link rel="icon" type="image/x-icon" href="" />
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css" />
+	<link rel="stylesheet" href="//cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.37.1/apexcharts.min.css" />
+
+	<link rel="stylesheet" href="{% static 'css/core.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/theme-default.css' %}" />
+	<link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+	{% block css_block %}{% endblock css_block %}
+
+</head>
+
+<body>
+
+	<div class="layout-wrapper layout-content-navbar layout-without-menu">
+		<div class="layout-container">
+
+			<div class="layout-page">
+				<nav class="layout-navbar navbar navbar-expand-xl navbar-detached bg-primary" id="layout-navbar">
+					<div class="navbar-nav-right d-flex " id="navbar-collapse">
+
+						<nav class="navbar ">
+							<div class="container-fluid">
+								<div class="navbar-nav me-auto">
+									<a class="nav-item nav-link {% if 'home' in request.path %} {{'active'}} {% else %} {{''}} {% endif %}" href="{% url 'home' %}">
+										<i class="menu-icon bx bx-home-circle"></i> Home
+									</a>
+									<a class="nav-item nav-link {% if 'manage_brands' in request.path %} {{'active'}} {% else %} {{''}} {% endif %}" href="{% url 'manage_brands' %}">
+										<i class="menu-icon bx bx-store"></i> Manage Brands
+									</a>
+								</div>
+							</div>
+						</nav>
+					</div>
+				</nav>		
+
+
+				<div class="content-wrapper">
+					<div class="container-xxl flex-grow-1 container-p-y">
+						{% block body %}
+
+
+
+						{% endblock body %}
+					</div>
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.37.1/apexcharts.min.js"></script>
+	<script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+
+
+	<script src="{% static 'js/main.js' %}"></script>
+
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+			$(".select2").select2({
+				placeholder: "Select"
+			});
+
+			$('.listview_table').DataTable({
+				language: {searchPlaceholder: "Search Records"},
+				columnDefs: [ { orderable: false, targets: [-1] }, { searchable: false, targets: [-1] }]
+			});
+		} );
+	</script>
+
+	{% block js_block %}
+
+	{% endblock js_block %}
+
+</body>
+
+</html>

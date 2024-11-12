@@ -1,0 +1,40 @@
+<!-- dynamic_form/templates/dynamic_form/form.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dynamic Form Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Dynamic Form Example</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <script>
+            $(document).ready(function () {
+                $('#id_category').on('change', function () {
+                    var selectedCategory = $(this).val();
+                    $.ajax({
+                        url: '/get_subcategories/',
+                        method: 'GET',
+                        data: { category: selectedCategory },
+                        success: function (data) {
+                            var subcategoryField = $('#id_subcategory');
+                            subcategoryField.empty();
+                            $.each(data.subcategories, function (key, value) {
+                                console.log(key, value);
+                                subcategoryField.append($("<option></option>").attr("value", key).text(value));
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
